@@ -39,6 +39,11 @@ recon_images = titok.codebook_ids_to_images(codes)
 assert recon_images.shape == images.shape
 ```
 
+## Todo
+
+- [ ] add multi-resolution patches
+- [ ] add lfq
+
 ## Citations
 
 ```bibtex
