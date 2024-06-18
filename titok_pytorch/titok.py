@@ -61,6 +61,8 @@ class TiTokTokenizer(Module):
         l - latents
         """
 
+        self.image_size = image_size
+
         assert divisible_by(image_size, patch_size)
 
         dim_patch = channels * patch_size ** 2
@@ -139,6 +141,8 @@ class TiTokTokenizer(Module):
         return_codebook_ids = False,
         return_recons = False
     ):
+        assert images.ndim == 4 and images.shape[-2:] == ((self.image_size,) * 2)
+
         batch = images.shape[0]
         orig_images = images
 
