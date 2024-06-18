@@ -173,7 +173,7 @@ class TiTokTokenizer(Module):
 
         _, latents = unpack(tokens, latents_packed_shape, 'b * d')
 
-        # vq
+        # vq - usually tokens here, but they do the latents
 
         quantized, indices, _ = self.vq(latents)
 
