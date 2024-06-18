@@ -139,7 +139,7 @@ class TiTokTokenizer(Module):
         self,
         images,
         return_codebook_ids = False,
-        return_recons = False
+        return_recon_images = False
     ):
         assert images.ndim == 4 and images.shape[-2:] == ((self.image_size,) * 2)
 
@@ -182,10 +182,13 @@ class TiTokTokenizer(Module):
         if return_codebook_ids:
             return indices
 
-        recon = self.decode(latents)
+        recon_images = self.decode(latents)
 
         # reconstruction loss
 
-        recon_loss = F.mse_loss(recon, orig_images)
+        recon_loss = F.mse_loss(recon_images, orig_images)
 
-        return recon_loss
+        if not return_recon_images:
+            return recon_loss
+
+        return recon_loss, recon_images
