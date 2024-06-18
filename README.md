@@ -1,6 +1,8 @@
+<img src="./titok.png" width="400px"></img>
+
 ## TiTok - Pytorch (wip)
 
-Implementation of TiTok, proposed by Bytedance in "An Image is Worth 32 Tokens for Reconstruction and Generation"
+Implementation of TiTok, proposed by Bytedance in <a href="https://yucornetto.github.io/projects/titok.html">An Image is Worth 32 Tokens for Reconstruction and Generation</a>
 
 ## Citations
 
