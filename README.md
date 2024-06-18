@@ -18,8 +18,15 @@ loss = titok(images)
 loss.backward()
 
 # after much training
+# extract codes for gpt, maskgit, whatever
 
 codes = titok.tokenize(images)
+
+# reconstructing images from codes
+
+recon_images = titok.codebook_ids_to_images(codes)
+
+assert recon_images.shape == images.shape
 ```
 
 ## Citations

@@ -1,3 +1,5 @@
+from math import sqrt
+
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -21,11 +23,14 @@ def exists(v):
 def divisible_by(num, den):
     return (num % den) == 0
 
-def pack_one(t, pattern):
-    return pack([t], pattern)
+def pack_square_height_width(t):
+    assert t.ndim == 4
+    return rearrange(t, 'b h w d -> b (h w) d')
 
-def unpack_one(t, ps, pattern):
-    return unpack(t, ps, pattern)[0]
+def unpack_square_height_width(t):
+    assert t.ndim == 3
+    hw = int(sqrt(t.shape[1]))
+    return rearrange(t, 'b (h w) d -> b h w d', h = hw, w = hw)
 
 # tokenizer
 
@@ -102,10 +107,37 @@ class TiTokTokenizer(Module):
     def tokenize(self, images):
         return self.forward(images, return_codebook_ids = True)
 
+    def codebook_ids_to_images(self, token_ids):
+        codes = self.vq.get_output_from_indices(token_ids)
+        return self.decode(codes)
+
+    def decode(self, latents):
+        batch = latents.shape[0]
+
+        # append mask tokens
+
+        mask_tokens = repeat(self.mask_tokens, 'n d -> b n d', b = batch)
+
+        tokens, mask_packed_shape = pack([mask_tokens, latents], 'b * d')
+
+        # decode
+
+        tokens = self.decoder(tokens)
+
+        tokens, _ = unpack(tokens, mask_packed_shape, 'b * d')
+
+        tokens = unpack_square_height_width(tokens)
+
+        # tokens to image patches
+
+        recon = self.tokens_to_image(tokens)
+        return recon
+
     def forward(
         self,
         images,
-        return_codebook_ids = False
+        return_codebook_ids = False,
+        return_recons = False
     ):
         batch = images.shape[0]
         orig_images = images
@@ -114,7 +146,7 @@ class TiTokTokenizer(Module):
 
         tokens = self.image_to_tokens(images)
 
-        tokens, height_width_shape = pack_one(tokens, 'b * d')
+        tokens = pack_square_height_width(tokens)
 
         # add absolute positions
 
@@ -146,23 +178,7 @@ class TiTokTokenizer(Module):
         if return_codebook_ids:
             return indices
 
-        # append mask tokens
-
-        mask_tokens = repeat(self.mask_tokens, 'n d -> b n d', b = batch)
-
-        tokens, mask_packed_shape = pack([mask_tokens, quantized], 'b * d')
-
-        # decode
-
-        tokens = self.decoder(tokens)
-
-        tokens, _ = unpack(tokens, mask_packed_shape, 'b * d')
-
-        tokens = unpack_one(tokens, height_width_shape, 'b * d')
-
-        # tokens to image patches
-
-        recon = self.tokens_to_image(tokens)
+        recon = self.decode(latents)
 
         # reconstruction loss
 
