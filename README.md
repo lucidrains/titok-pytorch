@@ -4,6 +4,20 @@
 
 Implementation of TiTok, proposed by Bytedance in <a href="https://yucornetto.github.io/projects/titok.html">An Image is Worth 32 Tokens for Reconstruction and Generation</a>
 
+## Usage
+
+```python
+import torch
+from titok_pytorch.titok import TiTokTokenizer
+
+images = torch.randn(2, 3, 256, 256)
+
+tokenizer = TiTokTokenizer(dim = 512)
+
+loss = tokenizer(images)
+loss.backward()
+```
+
 ## Citations
 
 ```bibtex

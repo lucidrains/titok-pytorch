@@ -25,8 +25,10 @@ classifiers=[
 ]
 
 dependencies = [
+    "einops>=0.8.0",
     "torch>=2.0",
-    "einops>=0.8.0"
+    "x-transformers>=1.30.20",
+    "vector-quantize-pytorch>=1.14.26"
 ]
 
 [project.urls]
