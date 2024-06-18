@@ -98,9 +98,14 @@ class TiTokTokenizer(Module):
             Rearrange('b h w (c p1 p2) -> b c (h p1) (w p2)', p1 = patch_size, p2 = patch_size)
         )
 
+    @torch.no_grad()
+    def tokenize(self, images):
+        return self.forward(images, return_codebook_ids = True)
+
     def forward(
         self,
-        images
+        images,
+        return_codebook_ids = False
     ):
         batch = images.shape[0]
         orig_images = images
@@ -135,6 +140,11 @@ class TiTokTokenizer(Module):
         # vq
 
         quantized, indices, _ = self.vq(latents)
+
+        # whether to early return
+
+        if return_codebook_ids:
+            return indices
 
         # append mask tokens
 

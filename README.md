@@ -12,10 +12,14 @@ from titok_pytorch.titok import TiTokTokenizer
 
 images = torch.randn(2, 3, 256, 256)
 
-tokenizer = TiTokTokenizer(dim = 512)
+titok = TiTokTokenizer(dim = 512)
 
-loss = tokenizer(images)
+loss = titok(images)
 loss.backward()
+
+# after much training
+
+codes = titok.tokenize(images)
 ```
 
 ## Citations
