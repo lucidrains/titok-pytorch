@@ -12,7 +12,11 @@ from titok_pytorch.titok import TiTokTokenizer
 
 images = torch.randn(2, 3, 256, 256)
 
-titok = TiTokTokenizer(dim = 512)
+titok = TiTokTokenizer(
+    dim = 512,
+    num_latent_tokens = 32,   # they claim only 32 tokens needed
+    codebook_size = 8192      # codebook size 8192
+)
 
 loss = titok(images)
 loss.backward()
