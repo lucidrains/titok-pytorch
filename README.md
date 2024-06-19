@@ -43,6 +43,7 @@ assert recon_images.shape == images.shape
 
 - [ ] add multi-resolution patches
 - [ ] add lfq
+- [ ] support video
 
 ## Citations
 
