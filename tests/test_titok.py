@@ -6,7 +6,10 @@ def test_titok():
 
     images = torch.randn(2, 3, 256, 256)
 
-    titok = TiTokTokenizer(dim = 512)
+    titok = TiTokTokenizer(
+        dim = 512,
+        num_latent_tokens = 32
+    )
 
     loss = titok(images)
     loss.backward()
@@ -15,6 +18,8 @@ def test_titok():
     # extract codes for gpt, maskgit, whatever
 
     codes = titok.tokenize(images)
+
+    assert codes.shape == (2, 32)
 
     # reconstructing images from codes
 

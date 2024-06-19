@@ -30,7 +30,7 @@ loss.backward()
 # after much training
 # extract codes for gpt, maskgit, whatever
 
-codes = titok.tokenize(images)
+codes = titok.tokenize(images) # (2, 32)
 
 # reconstructing images from codes
 
