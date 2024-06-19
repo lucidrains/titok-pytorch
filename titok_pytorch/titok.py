@@ -182,7 +182,7 @@ class TiTokTokenizer(Module):
         if return_codebook_ids:
             return indices
 
-        recon_images = self.decode(latents)
+        recon_images = self.decode(quantized)
 
         # reconstruction loss
 
