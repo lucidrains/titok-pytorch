@@ -44,7 +44,11 @@ class TiTokTokenizer(Module):
         channels = 3,
         num_latent_tokens = 32,
         enc_depth = 6,
+        enc_heads = 8,
+        enc_dim_head = 64,
         dec_depth = 6,
+        dec_heads = 8,
+        dec_dim_head = 64,
         codebook_size = 8192,
         enc_kwargs: dict = dict(),
         dec_kwargs: dict = dict(),
@@ -84,6 +88,8 @@ class TiTokTokenizer(Module):
         self.encoder = Encoder(
             dim = dim,
             depth = enc_depth,
+            heads = enc_heads,
+            attn_dim_head = enc_dim_head,
             **enc_kwargs
         )
 
@@ -97,6 +103,8 @@ class TiTokTokenizer(Module):
         self.decoder = Encoder(
             dim = dim,
             depth = dec_depth,
+            heads = dec_heads,
+            attn_dim_head = dec_dim_head,
             **dec_kwargs
         )
 

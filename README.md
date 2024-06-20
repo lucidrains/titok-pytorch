@@ -19,9 +19,10 @@ from titok_pytorch import TiTokTokenizer
 images = torch.randn(2, 3, 256, 256)
 
 titok = TiTokTokenizer(
-    dim = 512,
+    dim = 1024,
+    patch_size = 32,
     num_latent_tokens = 32,   # they claim only 32 tokens needed
-    codebook_size = 8192      # codebook size 8192
+    codebook_size = 4096      # codebook size 4096
 )
 
 loss = titok(images)
@@ -42,8 +43,6 @@ assert recon_images.shape == images.shape
 ## Todo
 
 - [ ] add multi-resolution patches
-- [ ] add lfq
-- [ ] support video
 
 ## Citations
 
